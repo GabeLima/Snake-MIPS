@@ -1,6 +1,5 @@
 # Gabriello Lima
 # glima
-# 112803276
 
 ############################ DO NOT CREATE A .data SECTION ############################
 ############################ DO NOT CREATE A .data SECTION ############################
@@ -37,7 +36,7 @@ load_game:
 	
 	#grab row and col off the stack and save in s2, s3
 	li $t1, '\r' #character to skip over
-	li $t2, '\n' #character to skip over							#HEREHEREHEREHEREHERE
+	li $t2, '\n' #character to skip over							
 	li $t3, 0 #number of chars we pulled out to make the row
 	li $t6, 1 #used to do row and col
 	get_row_from_file:
@@ -77,7 +76,7 @@ load_game:
 		get_row_decimal:
 			li $t4, 1
 			beq $t3, $t4, one_row_decimal
-			beqz $t3, get_row_from_file						#herhereherherer	HEREHERHEHERHGSDERTGRSETDHSEG
+			beqz $t3, get_row_from_file						
 			j two_row_decimal
 		one_row_decimal:
 			lw $s3, 0($sp) #s3 stores the row now
@@ -96,9 +95,9 @@ load_game:
 			j finished_row_get_col
 		two_row_decimal:
 			lw $s3, 0($sp) #s3 stores 10^0 of row now
-			addi $s3, $s3, -48										####
+			addi $s3, $s3, -48										
 			lw $t4, 4($sp) 
-			addi $t4, $t4, -48 										#####
+			addi $t4, $t4, -48 										
 			li $t5, 10
 			mul $t4, $t4, $t5 # t4 *=10
 			add $s3, $s3, $t4 #s3 now stores the row value
@@ -148,7 +147,7 @@ load_game:
 	
 	#gonna have to keep track of number of things we've stored so we can get the headrow and headcolumn using mod arithmetic
 	read_from_file_load_game_loop:
-		#li $t1, '\r' #character to skip over											KKKKKKKKKKKKKKKKK
+		#li $t1, '\r' #character to skip over											
 		addi $sp, $sp, -4 #make space on the stack
 		move $a0, $s2 #file descriptor
 		move $a1, $sp #where we save the byte
@@ -156,7 +155,7 @@ load_game:
 		li $v0, 14
 		syscall
 		beqz $v0, finished_reading_from_file_loop #we're done with the file if v0 is 0
-		#addi $t8, $t8, 1 #increments number of times we've gone through double array...				#######1111111111
+		#addi $t8, $t8, 1 #increments number of times we've gone through double array...				
 		lw $t3, 0($sp) #loads the character we just saved on the stack
 		beq $t3, $t1, remove_endline_from_stack
 		beq $t3, $t2, remove_endline_from_stack
@@ -165,10 +164,10 @@ load_game:
 		sb $t3, 0($s6)
 		addi $s6, $s6, 1 #increment s6 by one to store next string...
 		
-		#li $t1, 1													#KKKKKKKKKKKKKKKKKK
+		#li $t1, 1													
 		beq $t3, $t4, increment_number_wall_characters_found
 		beq $t3, $t5, found_an_apple_in_read_loop
-		beq $t3, $t7, found_head_of_snake_in_loop									#t7 used to be t1
+		beq $t3, $t7, found_head_of_snake_in_loop									
 		li $t9, '.'
 		beq $t3, $t9, read_from_file_load_game_loop
 		#IF IT MAKES IT HEAR IT MEANS ITS A PART OF THE SNAKE
@@ -176,7 +175,7 @@ load_game:
 		#need something at the end here... if its none of the above just call read again
 		j read_from_file_load_game_loop
 		remove_endline_from_stack:
-			#addi $t8, $t8, -1												#111111111111111111111111
+			#addi $t8, $t8, -1												
 			addi $sp, $sp, 4 #deletes the allocated memory for the character we loaded so it goes bye bye
 			j read_from_file_load_game_loop
 		increment_number_wall_characters_found:
@@ -200,7 +199,7 @@ load_game:
 			
 			
 	finished_reading_from_file_loop:
-		move $sp, $fp									#XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+		move $sp, $fp									
 		#since head isnt counted we increment by one
 		addi $s5, $s5, 1
 		sb $s5, 4($s0) #stores the length of the snake.
@@ -287,9 +286,9 @@ get_slot:
 		lw $s2, 8($sp)
 		addi $sp, $sp, 12 #deallocate stack
 		
-		#move $a0, $v0													#DELETE LATER
-		#li $v0, 11													#DELETE LATER
-		#syscall														#DELETE LATER
+		#move $a0, $v0													
+		#li $v0, 11													
+		#syscall														
 		
 	 	jr $ra
 set_slot:
@@ -530,8 +529,8 @@ slide_body: #state, row change, col change, apple[], apples length
 		found_a_valid_spot_slide_after:
 
 		move $a0, $s0 #state
-		sb $s1, 2($s0) #store new headrow								#HERE MAYBE?
-		sb $s2, 3($s0) #store new headcol								#used to be 0,1 respectively
+		sb $s1, 2($s0) #store new headrow								
+		sb $s2, 3($s0) #store new headcol								
 		move $a1, $s1 #new headrow
 		move $a2, $s2 #new headcol
 		li $a3, '1'
@@ -861,7 +860,7 @@ move_snake: #state, char direction, apple[], apples length
 		li $t0, 7918273    # putting some random garbage in $t0
 		jal slide_body
 		addi $sp, $sp, 4
-		bltz $v0, unsuccessful_movement								#UUUUUUUUUUUUUUUUUUUUUUUUUUU
+		bltz $v0, unsuccessful_movement								
 		bgtz $v0, snake_ate_apple
 		#else its 0
 		li $v0, 0
@@ -911,8 +910,8 @@ simulate_game: #state, string filename, string directions, int num_moves_to_exec
 	move $s2, $a2 #directions
 	move $s3, $a3 #num moves
 	move $s7, $s3 #copy of num moves value
-	lw $s4, 36($sp) #apples[]                                                            xxxxxxxxxxxxxxxxxx HAVE TO CHANGE AFTER ALLOCATING STACK
-	lw $s5, 40($sp) #apples length 							XXXXXXXXXXXXXXXXXXXX HAVE TO CHANGE AFTER ALLOCATING STACK.
+	lw $s4, 36($sp) #apples[]                                                           
+	lw $s5, 40($sp) #apples length 							
 	
 	
 	#1. Call load Game (state, filename)
@@ -988,7 +987,7 @@ simulate_game: #state, string filename, string directions, int num_moves_to_exec
 		move $a2, $s4 #apple[]
 		move $a3, $s5 #apples length
 		jal move_snake
-		bltz $v1, break_out_of_loop						#USED TO BE V0 TO CHECK
+		bltz $v1, break_out_of_loop						
 		li $t1, 100
 		beq $v0, $t1, add_to_score
 		j decrement_num_moves
@@ -996,7 +995,7 @@ simulate_game: #state, string filename, string directions, int num_moves_to_exec
 		add_to_score:
 			lb $t2, 4($s0) #length
 			addi $t2, $t2, -1 #length-1
-			mult $t2, $t1 # score * length-1 			#used to be s6 not t1
+			mult $t2, $t1 # score * length-1 			
 			mflo $t3
 			add $s6, $t3, $s6 #s6 = s6 + s6 * length-1 where s6 = score
 			j decrement_num_moves
